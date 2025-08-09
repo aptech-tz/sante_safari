@@ -30,6 +30,7 @@ export default function Navbar() {
     e.preventDefault();
     const el = document.querySelector("#booking");
     if (el) el.scrollIntoView({ behavior: "smooth" });
+    setIsMenuOpen(false)
   };
 
   return (
