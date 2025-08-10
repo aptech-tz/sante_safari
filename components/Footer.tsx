@@ -14,8 +14,7 @@ export default function Footer() {
          </div>
         <div>
         <p className="uppercase">Adress</p>
-          <p className="">Plot No.1, Laibon Street, Arusha</p>
-<p className="">P.O. Box 2485 | Dar es Salaam</p>
+          <p className="">Arusha</p>
 <p className="">Phone: +255 767 921 035</p>
 <p className="">Email: info@santesafari.org</p>
         </div>
