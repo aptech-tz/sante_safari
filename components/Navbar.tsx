@@ -95,8 +95,8 @@ export default function Navbar() {
                 : "opacity-0 -translate-x-4"
             }`} style={{ transitionDelay: `${index * 50}ms` }}>
               <Link
-                href={link.href}
-                onClick={e => handleNav(e, link.href)}
+          onClick={() => (setIsMenuOpen(false))}
+          href={link.href}
                 className="block text-gray-700 font-semibold py-2 hover:text-sky-600 transition-colors duration-200"
               >
                 {link.label}
@@ -110,10 +110,12 @@ export default function Navbar() {
             : "opacity-0 translate-y-2"
         }`} style={{ transitionDelay: "200ms" }}>
           <button
-            onClick={handleBookNow}
+          onClick={() => (setIsMenuOpen(false))}
             className="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold px-5 py-3 rounded-xl shadow transition-colors duration-200"
           >
+            <Link href='#booking'>
             Book Now
+            </Link>
           </button>
         </div>
       </div>
