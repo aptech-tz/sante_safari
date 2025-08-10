@@ -1,6 +1,7 @@
 "use client";
-import Link from "next/link";
 import React, { useState } from "react";
+import Link from "next/link";
+
 
 const NAV_LINKS = [
   { label: "Who We Are", href: "#about" },
