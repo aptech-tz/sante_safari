@@ -21,7 +21,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-4">
-          <h2 className="mb-2 uppercase">Explore</h2>
+          <h2 className="uppercase">Explore</h2>
           <Link className="block" href='#about'> About us </Link>
           <Link className="block" href='#Contacts'>Contacts</Link>
           <Link className="block" href='#Gellery'>Gellery</Link>
