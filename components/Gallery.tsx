@@ -184,7 +184,7 @@ export default function Gallery() {
         }}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
+        onMouseMove={handleMouseMove} 
         onMouseUp={endDrag}
       >
         <div className="flex w-max gap-4 px-4 py-1">
