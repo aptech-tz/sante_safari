@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
 const SLIDES = [
@@ -134,7 +135,9 @@ export default function Hero() {
           onClick={handleBook}
           className="mt-10 bg-sky-500 hover:bg-sky-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg text-lg transition-colors duration-200"
         >
+          <Link href='#booking'>
           Book Your Journey
+          </Link>
         </button>
       </div>
     </section>

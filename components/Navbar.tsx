@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const NAV_LINKS = [
@@ -93,13 +94,13 @@ export default function Navbar() {
                 ? "opacity-100 translate-x-0" 
                 : "opacity-0 -translate-x-4"
             }`} style={{ transitionDelay: `${index * 50}ms` }}>
-              <a
+              <Link
                 href={link.href}
                 onClick={e => handleNav(e, link.href)}
                 className="block text-gray-700 font-semibold py-2 hover:text-sky-600 transition-colors duration-200"
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
