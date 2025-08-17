@@ -10,6 +10,11 @@ const EXPERIENCES = [
   "Eco Camping",
 ];
 
+// Simple sanitization function
+function sanitize(input: string) {
+  return input.replace(/[<>]/g, "");
+}
+
 export default function BookingForm() {
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -18,17 +23,31 @@ export default function BookingForm() {
     const form = formRef.current;
     if (!form) return;
     const data = new FormData(form);
-    const name = data.get("name");
-    const email = data.get("email");
-    const dates = data.get("dates");
-    const experience = data.get("experience");
-    const notes = data.get("notes");
+
+    // Validation
+    const name = sanitize((data.get("name") as string || "").trim());
+    const email = sanitize((data.get("email") as string || "").trim());
+    const dates = sanitize((data.get("dates") as string || "").trim());
+    const experience = sanitize((data.get("experience") as string || "").trim());
+    const notes = sanitize((data.get("notes") as string || "").trim());
+
+    if (!name || !email || !dates || !experience) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    // Basic email format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
     const text = encodeURIComponent(
       `Booking Inquiry from Sante Safaris:%0A` +
       `Name: ${name}%0AEmail: ${email}%0ADates: ${dates}%0AExperience: ${experience}%0ASpecial Notes: ${notes}`
     );
-   
-    console.log(text)
+
     const url = `https://wa.me/${255767921035}?text=${text}`;
     window.open(url, '_blank');
   };
@@ -36,7 +55,7 @@ export default function BookingForm() {
   return (
     <section id="booking" className="py-16 bg-[#fdfdfd]">
       <div className="max-w-2xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center text-sky-700 mb-10">Book Your Journey</h2>
+        <h2 className="text-3xl font-bold text-center text-[#532e11] mb-10">Book Your Journey</h2>
         <form
           ref={formRef}
           onSubmit={handleSubmit}
@@ -49,6 +68,8 @@ export default function BookingForm() {
               id="name"
               name="name"
               required
+              minLength={2}
+              maxLength={50}
               className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
             />
           </div>
@@ -59,6 +80,7 @@ export default function BookingForm() {
               id="email"
               name="email"
               required
+              maxLength={100}
               className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
             />
           </div>
@@ -92,13 +114,14 @@ export default function BookingForm() {
               id="notes"
               name="notes"
               rows={3}
+              maxLength={300}
               className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
               placeholder="Let us know any special requests..."
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
+            className="w-full bg-[#532e11] hover:bg-[#472009] text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
           >
             Send to WhatsApp
           </button>
@@ -106,4 +129,4 @@ export default function BookingForm() {
       </div>
     </section>
   );
-} 
+}

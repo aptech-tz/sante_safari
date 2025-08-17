@@ -1,228 +1,204 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
-import ImageModal from "./ImageModal";
+import { useState } from "react";
 
-type ImageGroup = {
-  cover: string;
-  related: string[];
-  title?: string;
-};
-
-const IMAGE_GROUPS: ImageGroup[] = [
+const PHOTOS = [
   {
-    cover: "/photos/photo1.jpg",
-    related: [
-      "/photos/photo1.jpg",
-      "/photos/photo2.jpg",
-      "/photos/photo3.jpg",
-      "/photos/photo4.jpg",
-    ],
-    title: "Featured",
+    id: 1,
+    url: "/photos/IMG-20250808-WA0014.jpg",
+    caption: "Our clients boarding from plane",
   },
   {
-    cover: "/photos/IMG-20250808-WA0004.jpg",
-    related: [
-      "/photos/IMG-20250808-WA0004.jpg",
-      "/photos/IMG-20250808-WA0005.jpg",
-      "/photos/IMG-20250808-WA0006.jpg",
-      "/photos/IMG-20250808-WA0007.jpg",
-      "/photos/IMG-20250808-WA0008.jpg",
-      "/photos/IMG-20250808-WA0009.jpg",
-    ],
-    title: "Moments I",
+    id: 2,
+    url: "/photos/IMG-20250808-WA0004.jpg",
+    caption: "Antelope roaming freely",
   },
   {
-    cover: "/photos/IMG-20250808-WA0010.jpg",
-    related: [
-      "/photos/IMG-20250808-WA0010.jpg",
-      "/photos/IMG-20250808-WA0011.jpg",
-      "/photos/IMG-20250808-WA0012.jpg",
-      "/photos/IMG-20250808-WA0013.jpg",
-      "/photos/IMG-20250808-WA0014.jpg",
-      "/photos/IMG-20250808-WA0015.jpg",
-    ],
-    title: "Moments II",
+    id: 3,
+    url: "/photos/IMG-20250808-WA0034.jpg",
+    caption: "Our clients during camping",
   },
   {
-    cover: "/photos/IMG-20250808-WA0016.jpg",
-    related: [
-      "/photos/IMG-20250808-WA0016.jpg",
-      "/photos/IMG-20250808-WA0017.jpg",
-      "/photos/IMG-20250808-WA0018.jpg",
-      "/photos/IMG-20250808-WA0019.jpg",
-      "/photos/IMG-20250808-WA0020.jpg",
-      "/photos/IMG-20250808-WA0021.jpg",
-    ],
-    title: "Moments III",
+    id: 4,
+    url: "/photos/IMG-20250808-WA0005.jpg",
+    caption: "Giraffes at Serengeti National Park",
   },
   {
-    cover: "/photos/IMG-20250808-WA0026.jpg",
-    related: [
-      "/photos/IMG-20250808-WA0026.jpg",
-      "/photos/IMG-20250808-WA0030.jpg",
-      "/photos/IMG-20250808-WA0031.jpg",
-      "/photos/IMG-20250808-WA0032.jpg",
-      "/photos/IMG-20250808-WA0034.jpg",
-    ],
-    title: "Highlights",
+    id: 5,
+    url: "/photos/IMG-20250808-WA0006.jpg",
+    caption: "Hyenas at dusk.",
+  },
+  {
+    id: 6,
+    url: "/photos/photo3.jpg",
+    caption: "Our clients enjoying a sunset.",
+  },
+  {
+    id: 7,
+    url: "/photos/IMG-20250808-WA0007.jpg",
+    caption: "A visit at Mikumi National Park.",
+  },
+  {
+    id: 8,
+    url: "/photos/IMG-20250808-WA0008.jpg",
+    caption: "A visit at Serengeti National Park.",
+  },
+  {
+    id: 9,
+    url: "/photos/IMG-20250808-WA0009.jpg",
+    caption: "Zebra in the wild.",
+  },
+  {
+    id: 10,
+    url: "/photos/IMG-20250808-WA0010.jpg",
+    caption: "Lion walking majestically.",
+  },
+  {
+    id: 11,
+    url: "/photos/IMG-20250808-WA0011.jpg",
+    caption: "Hippopotamus at sunset.",
+  },
+  {
+    id: 12,
+    url: "/photos/IMG-20250808-WA0012.jpg",
+    caption: "Hippos in water.",
+  },
+  {
+    id: 13,
+    url: "/photos/IMG-20250808-WA0013.jpg",
+    caption: "Antelopes grazing.",
+  },
+  {
+    id: 14,
+    url: "/photos/IMG-20250808-WA0015.jpg",
+    caption: "Giraffes at Selous Game Reserve.",
+  },
+  {
+    id: 15,
+    url: "/photos/IMG-20250808-WA0016.jpg",
+    caption: "view of water",
+  },
+  {
+    id: 16,
+    url: "/photos/IMG-20250808-WA0017.jpg",
+    caption: "Giraffes at Mikumi National Park.",
+  },
+  {
+    id: 17,
+    url: "/photos/IMG-20250808-WA0018.jpg",
+    caption: "Giraffes at Mikumi National Park.",
+  },
+  {
+    id: 18,
+    url: "/photos/IMG-20250808-WA0019.jpg",
+    caption: "Lioness with her cubs.",
+  },
+  {
+    id: 19,
+    url: "/photos/IMG-20250808-WA0020.jpg",
+    caption: "Lioness hunting",
+  },
+  {
+    id: 20,
+    url: "/photos/IMG-20250808-WA0021.jpg",
+    caption: "Lion family",
+  },
+  {
+    id: 21,
+    url: "/photos/IMG-20250808-WA0026.jpg",
+    caption: "Lion family at sunset",
+  },
+ 
+  {
+    id: 22,
+    url: "/photos/IMG-20250808-WA0032.jpg",
+    caption: "Our clients camping.",
+  },
+  {
+    id: 23,
+    url: "/photos/photo1.jpg",
+    caption: "Mules grazing at Serengeti National Park.",
+  },
+  {
+    id: 24,
+    url: "/photos/photo2.jpg",
+    caption: "Mules grazing.",
+  },
+  {
+    id: 25,
+    url: "/photos/photo4.jpg",
+    caption: "Elephants at Mikumi National Park.",
   },
 ];
 
+const PHOTOS_PER_PAGE = 9;
+
 export default function Gallery() {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PHOTOS_PER_PAGE);
+  const [selectedPhoto, setSelectedPhoto] = useState<typeof PHOTOS[0] | null>(null);
 
-  const duplicatedGroups = useMemo(() => IMAGE_GROUPS.concat(IMAGE_GROUPS), []);
-
-  const handleOpen = (index: number) => {
-    setSelectedIndex(index % IMAGE_GROUPS.length);
-    setIsModalOpen(true);
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + PHOTOS_PER_PAGE);
   };
 
-  const handleClose = () => setIsModalOpen(false);
-
-  const currentGroup =
-    selectedIndex !== null ? IMAGE_GROUPS[selectedIndex] : undefined;
-
-  // Auto-scroll logic with seamless loop using duplicated content
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-
-    let rafId = 0;
-    let lastTs = 0;
-    const speedPxPerSec = 60; // adjust speed here
-    const contentLoopWidth = container.scrollWidth / 2; // because we duplicated
-
-    const tick = (ts: number) => {
-      if (!lastTs) lastTs = ts;
-      const dt = Math.min(100, ts - lastTs) / 1000; // cap delta to avoid jumps
-      lastTs = ts;
-
-      if (!isHovered) {
-        container.scrollLeft += speedPxPerSec * dt;
-        if (container.scrollLeft >= contentLoopWidth) {
-          container.scrollLeft = container.scrollLeft - contentLoopWidth;
-        }
-      }
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [isHovered]);
-
-  // Translate vertical wheel to horizontal scroll when hovering
-  const handleWheel: React.WheelEventHandler<HTMLDivElement> = (e) => {
-    const container = scrollRef.current;
-    if (!container) return;
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      e.preventDefault();
-      container.scrollLeft += e.deltaY;
-    }
+  const handlePhotoClick = (photo: typeof PHOTOS[0]) => {
+    setSelectedPhoto(photo);
   };
 
-  // Mouse drag to scroll behavior
-  const isDraggingRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragStartScrollRef = useRef(0);
-
-  const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    const container = scrollRef.current;
-    if (!container) return;
-    isDraggingRef.current = true;
-    dragStartXRef.current = e.clientX;
-    dragStartScrollRef.current = container.scrollLeft;
-    container.classList.add("cursor-grabbing");
-  };
-
-  const handleMouseMove: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    const container = scrollRef.current;
-    if (!container || !isDraggingRef.current) return;
-    const dx = e.clientX - dragStartXRef.current;
-    container.scrollLeft = dragStartScrollRef.current - dx;
-  };
-
-  const endDrag = () => {
-    const container = scrollRef.current;
-    if (container) container.classList.remove("cursor-grabbing");
-    isDraggingRef.current = false;
+  const handleClose = () => {
+    setSelectedPhoto(null);
   };
 
   return (
-    <section id="gallery" className="relative overflow-hidden py-12">
-      {/* Background gradient and blurred blobs */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-sky-50 via-emerald-50 to-white"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-24 -left-16 h-80 w-80 rounded-full bg-sky-300/30 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-24 -right-16 h-96 w-96 rounded-full bg-emerald-300/30 blur-3xl"
-      />
-      <div className="mx-auto max-w-6xl px-6">
-        <h2 className="mb-6 text-center text-3xl font-bold text-sky-700 md:mb-10">
-          Gallery
-        </h2>
-      </div>
-
-      <div
-        ref={scrollRef}
-        className="select-none overflow-x-auto scrollbar-hide cursor-grab"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => {
-          setIsHovered(false);
-          endDrag();
-        }}
-        onWheel={handleWheel}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove} 
-        onMouseUp={endDrag}
-      >
-        <div className="flex w-max gap-4 px-4 py-1">
-          {duplicatedGroups.map((group, idx) => (
-            <button
-              key={idx}
-              className="group relative h-40 w-[280px] flex-shrink-0 overflow-hidden rounded-xl bg-slate-100 shadow md:h-56 md:w-[360px] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
-              onClick={() => handleOpen(idx)}
-              aria-label={`Open ${group.title ?? "images"}`}
+    <section id="gallery" className="py-16 bg-sky-50">
+      <div className="max-w-6xl mx-auto px-4">
+        <h2 className="text-3xl font-bold text-center text-[#532e11] mb-10">Gallery</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {PHOTOS.slice(0, visibleCount).map((photo) => (
+            <div
+              key={photo.id}
+              className="rounded-lg overflow-hidden shadow bg-white cursor-pointer"
+              onClick={() => handlePhotoClick(photo)}
             >
-              <Image
-                src={group.cover}
-                alt={group.title ?? `Gallery item ${idx + 1}`}
-                fill
-                sizes="(max-width: 768px) 280px, 360px"
-                className="object-cover transition-transform duration-300 ease-out group-hover:scale-105 group-hover:opacity-70"
-                priority={idx < 2}
+              <img
+                src={photo.url}
+                alt={photo.caption}
+                className="w-full h-64 object-cover"
+                loading="lazy"
               />
-              {/* Center overlay CTA on hover */}
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                <span className="rounded-md bg-black/40 px-3 py-1.5 text-sm font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                  View photos
-                </span>
-              </div>
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent p-2 text-left text-xs font-medium text-white md:text-sm">
-                {group.title}
-              </div>
-            </button>
+            </div>
           ))}
         </div>
+        {visibleCount < PHOTOS.length && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={handleLoadMore}
+              className="bg-[#532e11] hover:bg-[#472009] text-white font-bold px-6 py-2 cursor-pointer rounded-xl shadow transition-colors duration-200"
+            >
+              Load More
+            </button>
+          </div>
+        )}
       </div>
-
-      <ImageModal
-        isOpen={isModalOpen}
-        images={currentGroup?.related ?? []}
-        onClose={handleClose}
-        title={currentGroup?.title}
-      />
+      {/* Modal for displaying selected photo */}
+      {selectedPhoto && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70" onClick={handleClose}>
+          <div className="relative max-w-2xl w-full mx-4" onClick={e => e.stopPropagation()}>
+            <img src={selectedPhoto.url} alt={selectedPhoto.caption} className="w-full rounded-lg shadow-lg" />
+            <button
+              onClick={handleClose}
+              className="absolute top-2 right-2 bg-white text-sky-700 rounded-full w-8 h-8 flex items-center justify-center shadow hover:bg-sky-100"
+              aria-label="Close"
+            >
+              <span className="text-2xl leading-none flex items-center justify-center w-full h-full">&times;</span>
+            </button>
+            {/* Caption below image */}
+            <div className="mt-4 text-center text-white text-lg font-medium">
+              {selectedPhoto.caption}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

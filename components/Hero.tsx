@@ -133,7 +133,7 @@ export default function Hero() {
         </h1>
         <button
           onClick={handleBook}
-          className="mt-10 bg-sky-500 hover:bg-sky-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg text-lg transition-colors duration-200"
+          className="mt-10 bg-[#532e11] hover:bg-[#472009] text-white font-bold px-8 py-4 rounded-xl shadow-lg text-lg transition-colors duration-200"
         >
           <Link href='#booking'>
           Book Your Journey

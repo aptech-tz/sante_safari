@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-
+import Image from "next/image";
 
 const NAV_LINKS = [
   { label: "Who We Are", href: "#about" },
@@ -40,18 +40,25 @@ export default function Navbar() {
       <nav className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Left: Logo + Brand */}
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-sky-200 rounded-full flex items-center justify-center font-bold text-sky-700 text-xl">S</div>
-          <span className="font-bold tracking-wider text-lg md:text-xl text-white">Sante Safaris</span>
+          <Image
+            src="/logo/sante--safaris-logo.png"
+            alt="Sante Safaris Logo"
+            width={40}
+            height={40}
+            className="rounded-full aspect-square object-cover bg-sky-200"
+            priority
+          />
+          <span className="font-bold tracking-wider text-lg md:text-xl text-[#532e11]">Santé Safaris</span>
         </div>
         
         {/* Center: Nav Links (Desktop) */}
-        <ul className="hidden md:flex gap-8 text-gray-700 font-semibold text-base">
+        <ul className="hidden md:flex gap-8 text-[#532e11] font-semibold text-base">
           {NAV_LINKS.map(link => (
             <li key={link.href}>
               <a
                 href={link.href}
                 onClick={e => handleNav(e, link.href)}
-                className="hover:text-sky-600 transition-colors duration-200"
+                className="hover:text-orange-800 transition-colors duration-200"
               >
                 {link.label}
               </a>
@@ -62,7 +69,7 @@ export default function Navbar() {
         {/* Right: Book Now Button (Desktop) */}
         <button
           onClick={handleBookNow}
-          className="hidden md:block bg-sky-500 hover:bg-sky-600 text-white font-bold px-5 py-2 rounded-xl shadow transition-colors duration-200"
+          className="hidden md:block bg-[#532e11] hover:bg-[#472009] text-white font-bold px-5 py-2 cursor-pointer rounded-xl shadow transition-colors duration-200"
         >
           Book Now
         </button>
@@ -70,7 +77,7 @@ export default function Navbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden p-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+          className="md:hidden p-2 text-[#532e11] transition-colors duration-200 bg-transparent"
         >
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {isMenuOpen ? (
@@ -98,7 +105,7 @@ export default function Navbar() {
               <Link
           onClick={() => (setIsMenuOpen(false))}
           href={link.href}
-                className="block text-gray-700 font-semibold py-2 hover:text-sky-600 transition-colors duration-200"
+                className="block text-gray-700 font-semibold py-2 hover:text-[#532e11] transition-colors duration-200"
               >
                 {link.label}
               </Link>
@@ -112,7 +119,7 @@ export default function Navbar() {
         }`} style={{ transitionDelay: "200ms" }}>
           <button
           onClick={() => (setIsMenuOpen(false))}
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold px-5 py-3 rounded-xl shadow transition-colors duration-200"
+            className="w-full bg-[#532e11] hover:bg-[#472009] cursor-pointer text-white font-bold px-5 py-3 rounded-xl shadow transition-colors duration-200"
           >
             <Link href='#booking'>
             Book Now
@@ -122,4 +129,4 @@ export default function Navbar() {
       </div>
     </header>
   );
-} 
+}
