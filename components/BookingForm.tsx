@@ -140,15 +140,15 @@ export default function BookingForm() {
         >
           &times;
         </button>
-        <h2 className="text-lg mb-4">1. Deposit amount 50% advance payment </h2>
-        <h2 className="text-lg mb-4">2. Final balance payment 50% deputer date.</h2>
-        <h2 className="text-lg mb-4">3.Accepted payment methods and currency euro€,Dollar $ and tz shillings.</h2>
+        <h2 className="mb-4">1. Deposit amount 50% advance payment </h2>
+        <h2 className="mb-4">2. Final balance payment 50% deputer date.</h2>
+        <h2 className="mb-4">3.Accepted payment methods and currency euro€,Dollar $ and tz shillings.</h2>
         <div className="mb-4">
           <h2>4.Cancellation & Refund:</h2>
           <p>It is important to note that our cancellation policy does not include refund after is payment done Confirmation message of payments should be there.</p>
         </div>
         <div className="mb-4">
-        <h2 className="text-lg mb-4">5.Contracts & Agreements</h2>
+        <h2 className="mb-4">5.Contracts & Agreements</h2>
         <p>Have guests sign a booking agreement outlining: Payment obligations, Deadlines, Late fees or penalties, Right to cancel their spot for non-payment</p>
         </div>
         <div className="mb-4">
