@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { createClient } from "contentful";
+import { useEffect, useState } from "react";
 
 const PHOTOS = [
   {
@@ -135,13 +136,34 @@ const PHOTOS_PER_PAGE = 9;
 
 export default function Gallery() {
   const [visibleCount, setVisibleCount] = useState(PHOTOS_PER_PAGE);
-  const [selectedPhoto, setSelectedPhoto] = useState<typeof PHOTOS[0] | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [photos, setPhotos] = useState(null)
+
+    useEffect(() => {
+      const getitems = async () => {
+        const client = createClient({
+          // This is the space ID. A space is like a project folder in Contentful terms
+          space: 'jps4oc4uuv1j',
+          // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
+          accessToken: 'fSZIlueulbUmzyfQVaKM9hwrAuixwfTP8uZzmMPyfaM',
+        });
+  
+        const response = await client.getEntries({ content_type: "gallery" });
+        setPhotos(response.items)
+        console.log(process.env.CONTENTFUL_SPACE);
+        console.log('hello')
+      };
+      getitems();
+    }, []);
+  
+        console.log(process.env.CONTENTFUL_SPACE);
+
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + PHOTOS_PER_PAGE);
   };
 
-  const handlePhotoClick = (photo: typeof PHOTOS[0]) => {
+  const handlePhotoClick = (photo) => {
     setSelectedPhoto(photo);
   };
 
@@ -154,20 +176,28 @@ export default function Gallery() {
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-[#532e11] mb-10">Gallery</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {PHOTOS.slice(0, visibleCount).map((photo) => (
+          {
+            photos ? (
+              photos.slice(0, visibleCount).map((photo, index) => (
             <div
-              key={photo.id}
+              key={index}
               className="rounded-lg overflow-hidden shadow bg-white cursor-pointer"
               onClick={() => handlePhotoClick(photo)}
             >
               <img
-                src={photo.url}
-                alt={photo.caption}
+                src={`https:${photo.fields.photo.fields.file.url}?w=500&h=500&fit=fill`}
+                alt='gallery photo'
                 className="w-full h-64 object-cover"
                 loading="lazy"
               />
             </div>
-          ))}
+          ))
+            ) : (
+              <>
+               <p className="text-center">Loading</p>
+              </>
+            )
+          }
         </div>
         {visibleCount < PHOTOS.length && (
           <div className="flex justify-center mt-8">
@@ -184,7 +214,7 @@ export default function Gallery() {
       {selectedPhoto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70" onClick={handleClose}>
           <div className="relative max-w-2xl w-full mx-4" onClick={e => e.stopPropagation()}>
-            <img src={selectedPhoto.url} alt={selectedPhoto.caption} className="w-full rounded-lg shadow-lg" />
+            <img src={`https:${selectedPhoto.fields.photo.fields.file.url}?w=500&h=500&fit=fill`} alt={selectedPhoto.caption} className="w-full rounded-lg shadow-lg" />
             <button
               onClick={handleClose}
               className="absolute top-2 right-2 bg-white text-sky-700 rounded-full w-8 h-8 flex items-center justify-center shadow hover:bg-sky-100"

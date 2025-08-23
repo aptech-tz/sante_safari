@@ -45,11 +45,11 @@ export default function BookingForm() {
     }
 
     const text = encodeURIComponent(
-`Name: ${name},
-%0AEmail: ${email},
- %0ADates: ${dates}, 
-%0AExperience: ${experience}, 
-%0ASpecial Notes: ${notes}`
+`A BOOKING FROM: ${name},
+ Email: ${email},
+ Dates: ${dates}, 
+ Experience: ${experience},
+ Special Notes: ${notes}`
     );
 
     const url = `https://wa.me/${255767921035}?text=${text}`;

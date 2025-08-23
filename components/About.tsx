@@ -37,7 +37,3 @@ export default function About() {
 }
 
 
-/*
-TOKEN:  fSZIlueulbUmzyfQVaKM9hwrAuixwfTP8uZzmMPyfaM
- SPACEID: jps4oc4uuv1j
-*/
