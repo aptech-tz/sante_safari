@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 const EXPERIENCES = [
   "Safari & Wildlife",
@@ -17,6 +17,7 @@ function sanitize(input: string) {
 
 export default function BookingForm() {
   const formRef = useRef<HTMLFormElement>(null);
+  const [openBoxmodel, setOpenBoxmodel] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,8 +45,11 @@ export default function BookingForm() {
     }
 
     const text = encodeURIComponent(
-      `Booking Inquiry from Sante Safaris:%0A` +
-      `Name: ${name}%0AEmail: ${email}%0ADates: ${dates}%0AExperience: ${experience}%0ASpecial Notes: ${notes}`
+`Name: ${name},
+%0AEmail: ${email},
+ %0ADates: ${dates}, 
+%0AExperience: ${experience}, 
+%0ASpecial Notes: ${notes}`
     );
 
     const url = `https://wa.me/${255767921035}?text=${text}`;
@@ -119,12 +123,63 @@ export default function BookingForm() {
               placeholder="Let us know any special requests..."
             />
           </div>
-          <button
-            type="submit"
-            className="w-full bg-[#532e11] hover:bg-[#472009] text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
+          <div
+          onClick={() => setOpenBoxmodel(true)}
+            className="w-full text-center bg-[#532e11] hover:bg-[#472009] text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
+          >
+            Send
+          </div>
+
+          {
+            openBoxmodel && (
+              <div className="fixed top-[80px] max-w-[500px] shadow-md w-[95vw] mx-auto inset-0  bg-opacity-50 z-50">
+      <div className="bg-white p-6 rounded-md shadow-lg h-[500px] overflow-y-auto relative">
+        <button
+          className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl"
+          onClick={ () => setOpenBoxmodel(false) }
+        >
+          &times;
+        </button>
+        <h2 className="text-lg mb-4">1. Deposit amount 50% advance payment </h2>
+        <h2 className="text-lg mb-4">2. Final balance payment 50% deputer date.</h2>
+        <h2 className="text-lg mb-4">3.Accepted payment methods and currency euro€,Dollar $ and tz shillings.</h2>
+        <div className="mb-4">
+          <h2>4.Cancellation & Refund:</h2>
+          <p>It is important to note that our cancellation policy does not include refund after is payment done Confirmation message of payments should be there.</p>
+        </div>
+        <div className="mb-4">
+        <h2 className="text-lg mb-4">5.Contracts & Agreements</h2>
+        <p>Have guests sign a booking agreement outlining: Payment obligations, Deadlines, Late fees or penalties, Right to cancel their spot for non-payment</p>
+        </div>
+        <div className="mb-4">
+        <h2>6. Secure Online Payment System</h2>
+        <p>Use platforms like: Pesa pal link, M-pesa</p>
+        </div>
+        <div className="mb-4">
+        <h2>7.Dear guests kindly be  informed that for guests who haven’t paid in full by specific date;</h2>
+        <p>● Will not be allowed to travel</p>
+        <p>● Will lose their spot without a refund.</p>
+        </div>
+
+        <div className="mb-4">
+        <h2>8.Reward early payment:</h2>
+        <p>● Bottlle of water </p>
+        <p>● Small discounts for the full payment.</p>
+        </div>
+
+        <p>Once the payment is completed, kindly share a screenshot as proof of payment to confirm your booking</p>
+
+         <button
+          type="submit"
+            className="w-full mb-4 mt-8 bg-[#532e11] hover:bg-[#472009] text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
           >
             Send to WhatsApp
           </button>
+      </div>
+    </div>
+            )
+          }
+
         </form>
       </div>
     </section>
