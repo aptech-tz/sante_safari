@@ -11,7 +11,7 @@ const SLIDES = [
   },
   {
     type: "video",
-    src: '/videos/lion.mp4',
+    src: '/videos/spa.mp4',
     alt: "Wildlife Experience",
     text: 'Reconnect with Nature and Yourself',
   },

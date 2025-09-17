@@ -3,22 +3,22 @@ import Image from "next/image";
 
 const FEATURES = [
   {
-    img: "/whyus/health.jpg",
+    img: "/whyus/itineraries.jpg",
     title: "Health-Centered Itineraries",
     text: "Focused on physical, emotional, and mental well-being."
   },
   {
-    img: "/whyus/travel.jpeg",
+    img: "/whyus/travel.jpg",
     title: "Sustainable & Responsible Travel",
     text: "Respecting local communities and the environment." 
   },
   {
-    img: "/whyus/destination.jpeg",
+    img: "/whyus/destination.jpg",
     title: "Carefully Curated Destinations",
     text: "Nature-rich, tranquil, and culturally immersive."
   },
   {
-    img: "/whyus/partnership.jpeg",
+    img: "/whyus/partnership.jpg",
     title: "Expert Local Partnerships",
     text: "Working with wellness practitioners, guides, and healers."
   },
@@ -39,7 +39,7 @@ export default function WhyUs() {
                     alt={f.title}
                     width={180}
                     height={120}
-                    className="rounded-lg object-cover w-full h-32"
+                    className="rounded-lg object-cover w-full h-48"
                   />
                 </div>
                 <h3 className="font-bold text-lg mb-2 text-[#532e11]">{f.title}</h3>

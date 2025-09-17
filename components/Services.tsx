@@ -9,7 +9,7 @@ const SERVICES = [
   {img:"/service/transportation.jpg", title: "Transportation"},
   {img:"/service/hiking.jpeg", title: "Hiking"},
   {img:"/service/excursion.jpeg", title: "Zanzibar Excursions"},
-  { img: "/service/citytravel.jpeg", title: "City Tours, Travel Planning & Custom" },
+  { img: "/service/citytravel.jpg", title: "City Tours, Travel Planning & Custom" },
 ];
 
 export default function Services() {
