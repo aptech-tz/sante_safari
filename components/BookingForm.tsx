@@ -1,219 +1,391 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { FadeUp } from ".";
+import { details } from "framer-motion/client";
+import React, { useEffect, useRef, useState } from "react";
+import GuestDropdown, { GuestCounts } from "./GuestDropdown";
 
 const EXPERIENCES = [
-  "Safari & Wildlife",
-  "Wellness Retreat",
-  "Nature Walk",
-  "Sunrise Yoga",
-  "Detox Escape",
-  "Eco Camping",
+	{
+		title: "Blue Safari (half day trip)",
+		details: ["Snorkeling", "Blue lagoon and star fish."],
+	},
+	{
+		title: "Swimming with dolphins at Kizimkazi (southern part).",
+		details: [
+			"Snorkeling",
+			"Swimming with turtles.",
+			"Pungume island",
+			"Lunch seafood and soft drinks",
+		],
+	},
+	{
+		title: "Horse Riding Michamvi",
+		details: ["Kayaak"],
+	},
+	{
+		title: "Tumbatu Island",
+		details: [
+			"Snorkiling",
+			"Village traditional tour",
+			"Lunch (Seafood and soft drinks)",
+		],
+	},
+	{
+		title: "Safari Blue Fumba (Fully day trip)",
+		details: [
+			"Snorkeling",
+			"Blue lagoon and star fish",
+			"Sun bank",
+			"Lunch seafood & fruits with soft drinks.",
+		],
+	},
+	{
+		title: "Jozani Forest (Fully day trip)",
+		details: [
+			"Red monkey",
+			"Spice farm",
+			"Maalum cave",
+			"The rock restaurant",
+			"Kae funk sunset.",
+		],
+	},
+	{
+		title: "Southern part day trip",
+		details: [
+			"Jozani Forest",
+			"Maalum cave",
+			"Salaam cave swimming with turtles",
+			"Mtende beach",
+			"The rock restaurant",
+			"Kae funk Sunset.",
+		],
+	},
+	{
+		title: "Mnemba island Northern part (Fully day trip)",
+		details: [
+			"Snorkeling",
+			"Baraka aquarium for turtles",
+			"Sun bank",
+			"Kendwa beach",
+			"Lunch seafood and drinks",
+		],
+	},
+	{
+		title: "Historical sites (Northern part) fully day trip",
+		details: [
+			"Stone town (City tour)",
+			"Spice farm",
+			"Prison island",
+			"Soft drinks",
+		],
+	},
+	{
+		title: "Safari + wildlife and eco camping",
+		details: [],
+	},
+	{
+		title: "Nature walk+sunrise yoga and wellness retreat",
+		details: [],
+	},
 ];
 
 // Simple sanitization function
 function sanitize(input: string) {
-  return input.replace(/[<>]/g, "");
+	return input.replace(/[<>]/g, "");
 }
 
 export default function BookingForm() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [openBoxmodel, setOpenBoxmodel] = useState(false)
-  const [message, setMessage] = useState("")
+	const formRef = useRef<HTMLFormElement>(null);
+	const [openBoxmodel, setOpenBoxmodel] = useState(false);
+	const [message, setMessage] = useState("");
+		const [showExperienceModal, setShowExperienceModal] = useState(false);
+		const [selectedExperience, setSelectedExperience] = useState<string>("");
+		const experienceModalRef = useRef<HTMLDivElement | null>(null);
 
-  const openBoxmodelHandler = () => {
-    const form = formRef.current;
-    if (!form) return;
-    const data = new FormData(form);
+		// Dismiss experience modal on click outside
+		useEffect(() => {
+			if (!showExperienceModal) return;
+			function onDoc(e: MouseEvent) {
+				if (experienceModalRef.current && !experienceModalRef.current.contains(e.target as Node)) {
+					setShowExperienceModal(false);
+				}
+			}
+			document.addEventListener("mousedown", onDoc);
+			return () => document.removeEventListener("mousedown", onDoc);
+		}, [showExperienceModal]);
+	const [guestCounts, setGuestCounts] = useState<GuestCounts>({ babies: 0, kids: 0, adults: 0 });
 
-    // Validation
-    const name = sanitize((data.get("name") as string || "").trim());
-    const email = sanitize((data.get("email") as string || "").trim());
-    const dates = sanitize((data.get("dates") as string || "").trim());
-    const experience = sanitize((data.get("experience") as string || "").trim());
-    const notes = sanitize((data.get("notes") as string || "").trim());
 
-    if(!name || !email || !dates || !experience || !notes ) {
-      setMessage("please fill all information before submission")
-    } else {
-      setOpenBoxmodel(true)
-      document.body.style.overflow = 'hidden'
-    }
+	// Removed unused guest dropdown logic
+	// Handle experience selection from modal
+	const handleExperienceSelect = (title: string) => {
+		setSelectedExperience(title);
+		setShowExperienceModal(false);
+	};
 
-  }
+	const openBoxmodelHandler = () => {
+		const form = formRef.current;
+		if (!form) return;
+		const data = new FormData(form);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = formRef.current;
-    if (!form) return;
-    const data = new FormData(form);
+		// Validation
+		const name = sanitize((data.get("name") as string || "").trim());
+		const email = sanitize((data.get("email") as string || "").trim());
+		const dates = sanitize((data.get("dates") as string || "").trim());
+		const experience = sanitize((data.get("experience") as string || "").trim());
+		const notes = sanitize((data.get("notes") as string || "").trim());
 
-    // Validation
-    const name = sanitize((data.get("name") as string || "").trim());
-    const email = sanitize((data.get("email") as string || "").trim());
-    const dates = sanitize((data.get("dates") as string || "").trim());
-    const experience = sanitize((data.get("experience") as string || "").trim());
-    const notes = sanitize((data.get("notes") as string || "").trim());
+		if (!name || !email || !dates || !experience || !notes) {
+			setMessage("please fill all information before submission");
+		} else {
+			setOpenBoxmodel(true);
+			document.body.style.overflow = "hidden";
+		}
+	};
 
-    if (!name || !email || !dates || !experience) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		const form = formRef.current;
+		if (!form) return;
+		const data = new FormData(form);
 
-    // Basic email format check
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
+		// Validation
+		const name = sanitize((data.get("name") as string || "").trim());
+		const email = sanitize((data.get("email") as string || "").trim());
+		const dates = sanitize((data.get("dates") as string || "").trim());
+		const experience = sanitize((data.get("experience") as string || "").trim());
+		const notes = sanitize((data.get("notes") as string || "").trim());
 
-    document.body.style.overflow = 'auto'
+		if (!name || !email || !dates || !experience) {
+			alert("Please fill in all required fields.");
+			return;
+		}
 
-    const text = encodeURIComponent(
-`A BOOKING FROM: ${name},
- Email: ${email},
- Dates: ${dates}, 
- Experience: ${experience},
- Special Notes: ${notes}`
-    );
+		// Basic email format check
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(email)) {
+			alert("Please enter a valid email address.");
+			return;
+		}
 
-    const url = `https://wa.me/${255767921035}?text=${text}`;
-    window.open(url, '_blank');
-  };
+		document.body.style.overflow = 'auto';
 
-  return (
-    <section id="booking" className="py-16 bg-[#fdfdfd]">
-      <div className="max-w-2xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center text-[#532e11] mb-10">Book Your Journey</h2>
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="bg-white shadow-lg rounded-lg p-8 space-y-6"
-        >
-          <div className="flex flex-col gap-2">
-            <label htmlFor="name" className="font-semibold text-gray-700">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              minLength={2}
-              maxLength={50}
-              className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="font-semibold text-gray-700">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              maxLength={100}
-              className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="dates" className="font-semibold text-gray-700">Date</label>
-            <input
-              type="date"
-              id="dates"
-              name="dates"
-              required
-              className="block w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="experience" className="font-semibold text-gray-700">Experience Category</label>
-            <select
-              id="experience"
-              name="experience"
-              required
-              className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
-            >
-              <option value="">Select an experience</option>
-              {EXPERIENCES.map((exp) => (
-                <option key={exp} value={exp}>{exp}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="notes" className="font-semibold text-gray-700">Comment</label>
-            <textarea
-              id="notes"
-              name="notes"
-              rows={3}
-              maxLength={300}
-              className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
-              placeholder="Let us know any special requests..."
-            />
-          </div>
-          <p className="text-red-700 opacity-65 my-2"> {message} </p>
-          <div
-          onClick={ openBoxmodelHandler }
-            className="w-full cursor-pointer text-center bg-[#532e11] hover:bg-[#472009] text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
-          >
-            Send
-          </div>
+		const text = encodeURIComponent(
+			`A BOOKING FROM: ${name},\nEmail: ${email},\nDates: ${dates},\nExperience: ${experience},\nGuests: Babies: ${guestCounts.babies}, Kids: ${guestCounts.kids}, Adults: ${guestCounts.adults}\nSpecial Notes: ${notes}`
+		);
 
-          {
-            openBoxmodel && (
-              <div className="fixed top-[80px] max-w-[500px] w-[90vw] mx-auto inset-0 bg-opacity-50 z-50">
-      <FadeUp>
-        <div className="bg-white p-6 h-[80vh] rounded-md border border-amber-500 overflow-y-auto relative">
-        <button
-          className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-5xl"
-          onClick={ () => {
-            setOpenBoxmodel(false)
-            document.body.style.overflow = 'auto'
-          } }
-        >
-          &times;
-        </button>
-        <h1 className="mt-4 mb-4 font-bold text-center">POLICY</h1>
-        <h2 className="mb-4">1. Deposit amount 50% advance payment </h2>
-        <h2 className="mb-4">2. Final balance payment 50% deputer date.</h2>
-        <h2 className="mb-4">3. Accepted payment methods and currency euro€,Dollar $ and tz shillings.</h2>
-        <div className="mb-4">
-          <h2>4. Cancellation & Refund:</h2>
-          <p>It is important to note that our cancellation policy does not include refund after is payment done Confirmation message of payments should be there.</p>
-        </div>
-        <div className="mb-4">
-        <h2>5. Contracts & Agreements</h2>
-        <p>Have guests sign a booking agreement outlining: Payment obligations, Deadlines, Late fees or penalties, Right to cancel their spot for non-payment</p>
-        </div>
-        <div className="mb-4">
-        <h2>6. Secure Online Payment System</h2>
-        <p>Use platforms like: Pesa pal link, M-pesa</p>
-        </div>
-        <div className="mb-4">
-        <h2>7. Dear guests kindly be  informed that for guests who haven’t paid in full by specific date;</h2>
-        <p>● Will not be allowed to travel</p>
-        <p>● Will lose their spot without a refund.</p>
-        </div>
+		const url = `https://wa.me/${255767921035}?text=${text}`;
+		window.open(url, '_blank');
+	};
 
-        <div className="mb-4">
-        <h2>8. Reward early payment:</h2>
-        <p>● Bottlle of water </p>
-        <p>● Small discounts for the full payment.</p>
-        </div>
+	return (
+		<section id="booking" className="py-16 bg-[#fdfdfd]">
+			<div className="max-w-2xl mx-auto px-6 relative">
+				<h2 className="text-3xl font-bold text-center text-[#532e11] mb-10">Book Your Journey</h2>
+				<form
+					ref={formRef}
+					onSubmit={handleSubmit}
+					className="bg-white shadow-lg rounded-lg p-8 space-y-6"
+				>
+					<div className="flex flex-col gap-2">
+						<label htmlFor="name" className="font-semibold text-gray-700">
+							Name
+						</label>
+						<input
+							type="text"
+							id="name"
+							name="name"
+							required
+							maxLength={100}
+							className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
+						/>
+					</div>
+					<div className="flex flex-col gap-2">
+						<label htmlFor="email" className="font-semibold text-gray-700">
+							Email
+						</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							required
+							maxLength={100}
+							className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
+						/>
+					</div>
+					<div className="flex flex-col gap-2">
+						<label htmlFor="dates" className="font-semibold text-gray-700">
+							Date
+						</label>
+						<input
+							type="date"
+							id="dates"
+							name="dates"
+							required
+							className="block w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
+						/>
+					</div>
+					<div className="flex flex-col gap-2">
+						<label htmlFor="experience" className="font-semibold text-gray-700">
+							Experience Category
+						</label>
+						<input
+							type="text"
+							id="experience"
+							name="experience"
+							required
+							readOnly
+							value={selectedExperience}
+							onClick={() => setShowExperienceModal(true)}
+							placeholder="Select an experience"
+							className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300 cursor-pointer bg-gray-50"
+						/>
+					</div>
+					<div className="flex flex-col gap-2">
+						<label htmlFor="notes" className="font-semibold text-gray-700">
+							Comment
+						</label>
+						<textarea
+							id="notes"
+							name="notes"
+							rows={3}
+							maxLength={300}
+							className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
+							placeholder="Let us know any special requests..."
+						/>
+					</div>
+					<div className="flex flex-col gap-2">
+						<label className="font-semibold text-gray-700 mb-1">Guests</label>
+						<GuestDropdown
+							value={guestCounts}
+							onChange={setGuestCounts}
+							maxTotal={20}
+							buttonLabel="Guests"
+						/>
+					</div>
+					<p className="text-red-700 opacity-65 my-2"> {message} </p>
+					<div
+						onClick={openBoxmodelHandler}
+						className="w-full cursor-pointer text-center bg-[#532e11] hover:bg-[#472009] text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
+					>
+						Send
+					</div>
 
-        <p>Once the payment is completed, kindly share a screenshot as proof of payment to confirm your booking</p>
+					{openBoxmodel && (
+						<div className="fixed top-[80px] max-w-[500px] w-[90vw] mx-auto inset-0 bg-opacity-50 z-50">
+							<div className="bg-white p-6 h-[80vh] rounded-md border border-amber-500 overflow-y-auto relative">
+								<button
+									className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-5xl"
+									onClick={() => {
+										setOpenBoxmodel(false);
+										document.body.style.overflow = "auto";
+									}}
+								>
+									&times;
+								</button>
+								<h1 className="mt-4 mb-4 font-bold text-center">
+									POLICY
+								</h1>
+								<h2 className="mb-4">
+									1. Deposit amount 50% advance payment{" "}
+								</h2>
+								<h2 className="mb-4">
+									2. Final balance payment 50% deputer date.
+								</h2>
+								<h2 className="mb-4">
+									3. Accepted payment methods and currency euro€,Dollar $
+									and tz shillings.
+								</h2>
+								<div className="mb-4">
+									<h2>4. Cancellation & Refund:</h2>
+									<p>
+										It is important to note that our cancellation policy
+										does not include refund after is payment done
+										Confirmation message of payments should be there.
+									</p>
+								</div>
+								<div className="mb-4">
+									<h2>5. Contracts & Agreements</h2>
+									<p>
+										Having guests sign a booking agreement outlining:
+										Payment obligations, Deadlines, Late fees or
+										penalties, Right to cancel their spot for
+										non-payment
+									</p>
+								</div>
+								<div className="mb-4">
+									<h2>6. Secure Online Payment System</h2>
+									<p>Use platforms like: Pesa pal link, M-pesa</p>
+								</div>
+								<div className="mb-4">
+									<h2>
+										7. Dear guests kindly be informed that for guests
+										who haven’t paid in full by specific date;
+									</h2>
+									<p>● Will not be allowed to travel</p>
+									<p>● Will lose their spot without a refund.</p>
+								</div>
 
-         <button
-          type="submit"
-            className="w-full mb-4 mt-8 bg-[#532e11] hover:bg-[#472009] text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
-          >
-            Send to WhatsApp
-          </button>
-      </div>
-      </FadeUp>
-    </div>
-            )
-          }
+								<div className="mb-4">
+									<h2>8. Reward early payment:</h2>
+									<p>● Bottlle of water </p>
+									<p>● Small discounts for the full payment.</p>
+								</div>
 
-        </form>
-      </div>
-    </section>
-  );
+								<p>
+									Once the payment is completed, kindly share a screenshot
+									as proof of payment to confirm your booking
+								</p>
+
+								<button
+									type="submit"
+									className="w-full mb-4 mt-8 bg-[#532e11] hover:bg-[#472009] text-white font-bold py-3 rounded-xl text-lg shadow transition-colors duration-200"
+								>
+									Send to WhatsApp
+								</button>
+							</div>
+						</div>
+					)}
+
+					{/* Experience Modal */}
+								{showExperienceModal && (
+									<div className="absolute inset-0 z-50 flex items-center justify-center">
+										<div
+											ref={experienceModalRef}
+											className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6 relative"
+										>
+											<button
+												className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-3xl"
+												onClick={() => setShowExperienceModal(false)}
+												aria-label="Close"
+											>
+												&times;
+											</button>
+											<h3 className="text-xl font-semibold text-[#532e11] mb-6 text-center">
+												Select Experience Category
+											</h3>
+											<div className="space-y-4 max-h-[60vh] overflow-y-auto">
+												{EXPERIENCES.map((exp, idx) => (
+													<div
+														key={idx}
+														className="border border-gray-200 rounded-lg p-4 hover:bg-[#f5edea] cursor-pointer transition"
+														onClick={() => handleExperienceSelect(exp.title)}
+													>
+														<div className="font-bold text-[#532e11] mb-2">
+															{exp.title}
+														</div>
+														<ul className="list-disc list-inside text-gray-700 pl-2">
+															{exp.details.map((item, i) => (
+																<li key={i}>{item}</li>
+															))}
+														</ul>
+													</div>
+												))}
+											</div>
+										</div>
+									</div>
+								)}
+				</form>
+			</div>
+		</section>
+	);
 }
