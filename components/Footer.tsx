@@ -31,7 +31,7 @@ export default function Footer() {
           <p className="text-[#532e11] uppercase font-semibold mb-1">Address</p>
           <p>Arusha</p>
           <p>Phone: +255 767 921 035</p>
-          <p>Email: info@santésafari.org</p>
+          <p>Email: info@santésafari.com</p>
         </div>
 
         {/* Special Links */}
