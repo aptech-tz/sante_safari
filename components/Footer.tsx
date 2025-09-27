@@ -30,8 +30,23 @@ export default function Footer() {
         <div className="text-gray-700">
           <p className="text-[#532e11] uppercase font-semibold mb-1">Address</p>
           <p>Arusha</p>
-          <p>Phone: +255 767 921 035</p>
-          <p>Email: info@santésafari.com</p>
+          {/* WhatsApp link */}
+  <a 
+    href="https://wa.me/255767921035" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="hover:text-green-600 transition"
+  >
+    Phone: +255 767 921 035
+  </a>
+  <br />
+  {/* Email link */}
+  <a 
+    href="mailto:info@santesafari.com" 
+    className="hover:text-blue-600 transition"
+  >
+    Email: info@santesafari.com
+  </a>
         </div>
 
         {/* Special Links */}
